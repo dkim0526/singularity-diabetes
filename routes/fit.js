@@ -45,7 +45,26 @@ routes.push({
     config: {
         auth: false,
         handler: function (request, reply) {
-            reply(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'http://localhost:3000/callback'));
+            reply(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'http://localhost:3000/api/fit/callback'));
+        },
+        tags: ['api']
+    }
+});
+
+routes.push({
+    method: 'GET',
+    path: API_BASE_PATH + '/callback',
+    config: {
+        auth: false,
+        handler: function (request, reply) {
+            console.log(request.query.code);
+            client.getAccessToken(request.query.code, 'http://localhost:3000/api/fit/callback').then(function (result) {
+                client.get("/profile.json", result.access_token).then(function (results) {
+                    reply(results[0]);
+                });
+            }).catch(function (error) {
+                reply(false);
+            });
         },
         tags: ['api']
     }
