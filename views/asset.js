@@ -4,11 +4,11 @@
 console.log("12345");
 
 $(document).ready(function(){
+	$(".circle").flip({
+    	trigger: 'manual'
+	});
 	$("#startBtn").click(function(){
 		console.log("whatip");		
-		$(".circle").flip({
-    		trigger: 'manual'
-		});
 		$(".circle").flip(true);
 	});
 
