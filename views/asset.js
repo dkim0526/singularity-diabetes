@@ -1,8 +1,3 @@
-
-
-
-console.log("12345");
-
 $(document).ready(function(){
 	$(".circle").flip({
     	trigger: 'manual'
@@ -18,7 +13,7 @@ $(document).ready(function(){
 	    	$(".front").empty();
 	    	$(".circle").flip(false);
 	    }
-	    $(".front").append("<p id='textForm' style='position: absolute; margin-top:130px;'>Can you login with your fitbit account?</p><button id='nextBtn' style='margin-top:280px; margin-left: 150px; padding: 13px; font-size:large; font-weight:bold;'>Login</button>");
+	    $(".front").append("<p id='textForm' style='position: absolute; margin-top:130px;'>Connect Your Fitbit</p><button id='nextBtn' style='margin-top:280px; margin-left: 150px; padding: 13px; font-size:large; font-weight:bold;'>Login</button>");
 	});
 
 	
