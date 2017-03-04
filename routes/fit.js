@@ -98,22 +98,50 @@ routes.push({
         auth: false,
         handler: function (request, reply) {
             MongoClient.connect(dburl, function(err, db) {
-              if(db.getCollection(request.payload).exists()){
+              if(db.getCollection(request.payload.username).exists()){
                 reply(false);
               }
               else{
-                db.createCollection(request.payload, function(err, collection){
+                db.createCollection(request.payload.username, function(err, collection){
                    if (err) throw err;
-                    console.log("Created Collection: " + request.payload);
+                    console.log("Created Collection: " + request.payload.username);
                 });
-                db.createCollection(request.payload + "data", function(err, collection){
+                db.createCollection(request.payload.username + "data", function(err, collection){
                    if (err) throw err;
-                    console.log("Created Collection: " + request.payload + "data");
+                    console.log("Created Collection: " + request.payload.username + "data");
                 });
               }
+              db.close();
             });
         },
-        tags: ['api']
+        tags: ['api'],
+        validate: {
+            params: {
+              username: Joi.string().required()
+            }
+        }
+    }
+});
+
+routes.push({
+    method: 'POST',
+    path: API_BASE_PATH + '/userscore',
+    config: {
+        auth: false,
+        handler: function (request, reply) {
+            MongoClient.connect(dburl, function(err, db) {
+              var collection = db.collection(request.payload.username);
+              collection.insert({date: new Date(), score: request.payload.score});
+              db.close();
+            });
+        },
+        tags: ['api'],
+        validate: {
+            params: {
+              username: Joi.string().required(),
+              score: Joi.number().integer().required()
+            }
+        }
     }
 });
 
