@@ -2,7 +2,15 @@
 
 body {
   padding-top: 2em;
-  background-color: #c02227;
+  background-color: #56D2A3;
+}
+
+.floating-logo{
+  position: fixed;
+  top: 20px;
+  left: 30px;
+  height: 50px;
+  z-index: 1;
 }
 
 .circle-container {
@@ -47,7 +55,7 @@ body {
     font-weight: 700;
     font-size: 9em;
     text-align: center;
-    color: #c02227;
+    color: #282B30;
 }
 		
 .back {
@@ -182,7 +190,7 @@ button {
   margin: 0 auto;
   margin-left: 50px;
   border: none;
-  background: #1abc9c;
+  background: #56D2A3;
   cursor: pointer;
   border-radius: 3px;
   padding: 6px;
