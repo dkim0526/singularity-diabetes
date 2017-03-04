@@ -42,24 +42,6 @@ routes.push({
     }
 });
 
-// GET /api/fit/{id}
-routes.push({
-    method: 'GET',
-    path: API_BASE_PATH + '/{id}',
-    config: {
-        auth: false,
-        handler: function (request, reply) {
-          reply(true);
-        },
-        tags: ['api'],
-        validate: {
-            params: {
-              id: Joi.number().integer().required()
-            }
-      }
-    }
-});
-
 routes.push({
     method: 'GET',
     path: API_BASE_PATH + '/authorize',
@@ -105,10 +87,6 @@ routes.push({
                 db.createCollection(request.payload.username, function(err, collection){
                    if (err) throw err;
                     console.log("Created Collection: " + request.payload.username);
-                });
-                db.createCollection(request.payload.username + "data", function(err, collection){
-                   if (err) throw err;
-                    console.log("Created Collection: " + request.payload.username + "data");
                 });
               }
               db.close();
