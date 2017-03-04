@@ -7,9 +7,9 @@ $(document).ready(function(){
 	$("#startBtn").click(function(){
 		console.log("whatip");		
 		$(".circle").flip({
-    		front: '.front',
-    		axis: 'x'
+    		trigger: 'manual'
 		});
+		$(".circle").flip(true);
 	});
 
 	
