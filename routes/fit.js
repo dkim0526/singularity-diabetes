@@ -2,6 +2,9 @@
 
 const Joi = require('joi');
 var FitbitApiClient = require("fitbit-node");
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
+var dburl = 'mongodb://localhost:27017/singularitydiabetes';
 
 var client = new FitbitApiClient("227H7Z", "d9a1cd45ceb53e96d4b9eeac77af5c60");
 const API_BASE_PATH = '/api/fit';
@@ -29,7 +32,11 @@ routes.push({
     config: {
         auth: false,
         handler: function (request, reply) {
-          reply(true);
+            MongoClient.connect(dburl, function(err, db) {
+              assert.equal(null, err);
+              reply("Connected successfully to server");
+              db.close();
+            });
         },
         tags: ['api']
     }
@@ -81,6 +88,60 @@ routes.push({
             });
         },
         tags: ['api']
+    }
+});
+
+routes.push({
+    method: 'POST',
+    path: API_BASE_PATH + '/createuser',
+    config: {
+        auth: false,
+        handler: function (request, reply) {
+            MongoClient.connect(dburl, function(err, db) {
+              if(db.getCollection(request.payload.username).exists()){
+                reply(false);
+              }
+              else{
+                db.createCollection(request.payload.username, function(err, collection){
+                   if (err) throw err;
+                    console.log("Created Collection: " + request.payload.username);
+                });
+                db.createCollection(request.payload.username + "data", function(err, collection){
+                   if (err) throw err;
+                    console.log("Created Collection: " + request.payload.username + "data");
+                });
+              }
+              db.close();
+            });
+        },
+        tags: ['api'],
+        validate: {
+            params: {
+              username: Joi.string().required()
+            }
+        }
+    }
+});
+
+routes.push({
+    method: 'POST',
+    path: API_BASE_PATH + '/userscore',
+    config: {
+        auth: false,
+        handler: function (request, reply) {
+            MongoClient.connect(dburl, function(err, db) {
+              var collection = db.collection(request.payload.username);
+              collection.insert({date: new Date(), score: request.payload.score});
+              db.close();
+            });
+        },
+        tags: ['api'],
+        validate: {
+            params: {
+              username: Joi.string().required(),
+              score: Joi.number().integer().required()
+            }
+        }
     }
 });
 
